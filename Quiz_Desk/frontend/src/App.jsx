@@ -8,6 +8,11 @@ import Login from './pages/Login';
 
 import Register from './pages/Register';
 
+import About from './pages/About';
+import Contact from './pages/Contact';
+
+import StudentDashboard from './pages/student/StudentDashboard';
+
 import './App.css';
 
 function App() {
@@ -25,6 +30,12 @@ function App() {
 
         <Route path="/register" element={<Register />} />
 
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route
+          path="/student-dashboard"
+          element={<StudentDashboard />}
+        />
       </Routes>
 
       <Footer />

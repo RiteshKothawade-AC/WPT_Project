@@ -8,11 +8,10 @@ function Navbar() {
             <h2 className="logo">QuizDesk</h2>
 
             <nav className="nav-links">
-                <a href="/">Home</a>
-                <a href="/about">About</a>
-                <a href="/contact">Contact</a>
+                <Link to="/">Home</Link>
+                <Link to="/about">About</Link>
+                <Link to="/contact">Contact</Link>
             </nav>
-
             <Link to="/login" className="login-btn">
                 Login
             </Link>

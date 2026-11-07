@@ -1,0 +1,36 @@
+
+.about-page {
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: 20px;
+}
+
+.about-page h1 {
+  text-align: center;
+  color: #2563eb;
+  margin-bottom: 20px;
+}
+
+.about-intro {
+  text-align: center;
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+.about-content {
+  background-color: #f8fafc;
+  padding: 30px;
+  border-radius: 10px;
+}
+
+.about-content h2 {
+  color: #1e40af;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.about-content p {
+  color: #4b5563;
+  line-height: 1.7;
+}
