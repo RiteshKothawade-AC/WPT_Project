@@ -1,0 +1,109 @@
+
+.profile-page {
+  min-height: 100vh;
+  padding: 35px;
+  background-color: #f1f5f9;
+}
+
+.profile-page h1 {
+  color: #1e293b;
+  margin-bottom: 10px;
+}
+
+.profile-description {
+  color: #64748b;
+  margin-bottom: 30px;
+}
+
+.profile-box {
+  max-width: 600px;
+  margin: auto;
+  padding: 30px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #2563eb;
+  color: white;
+  border-radius: 50%;
+  font-size: 30px;
+  margin-bottom: 15px;
+}
+
+.profile-header h2 {
+  color: #1e293b;
+  margin-bottom: 5px;
+}
+
+.profile-header p {
+  color: #64748b;
+}
+
+.profile-box form {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-box label {
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #334155;
+}
+
+.profile-box input {
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #cbd5e1;
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+.profile-box input:disabled {
+  background-color: #f8fafc;
+  color: #64748b;
+}
+
+.profile-box button {
+  padding: 12px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.profile-box button:hover {
+  background-color: #1d4ed8;
+}
+
+.profile-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.profile-buttons button {
+  flex: 1;
+}
+
+.profile-buttons .cancel-btn {
+  background-color: #64748b;
+}
+
+@media (max-width: 600px) {
+  .profile-page {
+    padding: 20px;
+  }
+}

@@ -134,3 +134,12 @@
     padding: 20px;
   }
 }
+.student-sidebar li a {
+  color: white;
+  text-decoration: none;
+  display: block;
+}
+
+.student-sidebar li a:hover {
+  color: #60a5fa;
+}
