@@ -1,4 +1,5 @@
 
+import { Link } from 'react-router-dom';
 import './StudentDashboard.css';
 
 function StudentDashboard() {
@@ -11,13 +12,26 @@ function StudentDashboard() {
         <h2>QuizDesk</h2>
 
         <ul>
-          <li>Dashboard</li>
-          <li>Available Exams</li>
-          <li>My Results</li>
-          <li>Exam History</li>
-          <li>My Profile</li>
-        </ul>
+          <li>
+            <Link to="/student-dashboard">Dashboard</Link>
+          </li>
 
+          <li>
+            <Link to="/available-exams">Available Exams</Link>
+          </li>
+
+          <li>
+            <Link to="/my-results">My Results</Link>
+          </li>
+
+          <li>
+            <Link to="/exam-history">Exam History</Link>
+          </li>
+
+          <li>
+            <Link to="/student-profile">My Profile</Link>
+          </li>
+        </ul>
         <button>Logout</button>
 
       </div>

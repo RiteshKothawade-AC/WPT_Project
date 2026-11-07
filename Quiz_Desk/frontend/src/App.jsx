@@ -12,7 +12,11 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 
 import StudentDashboard from './pages/student/StudentDashboard';
-
+import AvailableExams from './pages/student/AvailableExams';
+import ExamPage from './pages/student/ExamPage';
+import MyResults from './pages/student/MyResults';
+import ExamHistory from './pages/student/ExamHistory';
+import Profile from './pages/student/Profile';
 import './App.css';
 
 function App() {
@@ -36,7 +40,18 @@ function App() {
           path="/student-dashboard"
           element={<StudentDashboard />}
         />
-      </Routes>
+        <Route
+          path="/available-exams"
+          element={<AvailableExams />}
+        />
+        <Route path="/exam" element={<ExamPage />} />
+        <Route path="/my-results" element={<MyResults />} />
+        <Route
+          path="/exam-history"
+          element={<ExamHistory />}
+        />  
+        <Route path="/student-profile" element={<Profile />} />   
+         </Routes>
 
       <Footer />
 

@@ -1,0 +1,56 @@
+
+.exam-history {
+  min-height: 100vh;
+  padding: 35px;
+  background-color: #f1f5f9;
+}
+
+.exam-history h1 {
+  color: #1e293b;
+  margin-bottom: 10px;
+}
+
+.history-description {
+  color: #64748b;
+  margin-bottom: 30px;
+}
+
+.history-table {
+  background-color: white;
+  padding: 25px;
+  border-radius: 10px;
+  overflow-x: auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.history-table h2 {
+  color: #1e293b;
+  margin-bottom: 20px;
+}
+
+.history-table table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.history-table th,
+.history-table td {
+  padding: 15px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.history-table th {
+  background-color: #f8fafc;
+  color: #475569;
+}
+
+.history-table td {
+  color: #64748b;
+}
+
+@media (max-width: 768px) {
+  .exam-history {
+    padding: 20px;
+  }
+}
