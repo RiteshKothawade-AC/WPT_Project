@@ -1,0 +1,130 @@
+
+.manage-questions {
+  min-height: 100vh;
+  padding: 35px;
+  background-color: #f1f5f9;
+}
+
+.manage-questions h1 {
+  color: #1e293b;
+  margin-bottom: 10px;
+}
+
+.question-description {
+  color: #64748b;
+  margin-bottom: 30px;
+}
+
+/* Question Form */
+.question-form-box {
+  max-width: 650px;
+  padding: 25px;
+  background-color: white;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.question-form-box h2 {
+  color: #1e293b;
+  margin-bottom: 20px;
+}
+
+.question-form-box form {
+  display: flex;
+  flex-direction: column;
+}
+
+.question-form-box label {
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #334155;
+}
+
+.question-form-box input,
+.question-form-box select,
+.question-form-box textarea {
+  padding: 12px;
+  margin-bottom: 18px;
+  border: 1px solid #cbd5e1;
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+.question-form-box textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.question-form-box button {
+  padding: 12px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cancel-question-btn {
+  margin-top: 10px;
+  background-color: #64748b !important;
+}
+
+/* Question List */
+.question-list-box {
+  background-color: white;
+  padding: 25px;
+  border-radius: 10px;
+}
+
+.question-list-box h2 {
+  color: #1e293b;
+  margin-bottom: 20px;
+}
+
+.question-item {
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.question-item h3 {
+  color: #1e293b;
+  margin-bottom: 12px;
+}
+
+.question-item p {
+  color: #64748b;
+  margin-bottom: 8px;
+}
+
+.correct-answer {
+  color: #15803d !important;
+  font-weight: bold;
+  margin-top: 12px;
+}
+
+.edit-question-btn,
+.delete-question-btn {
+  padding: 9px 15px;
+  margin: 10px 8px 0 0;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+
+.edit-question-btn {
+  background-color: #2563eb;
+}
+
+.delete-question-btn {
+  background-color: #dc2626;
+}
+
+@media (max-width: 768px) {
+  .manage-questions {
+    padding: 20px;
+  }
+}

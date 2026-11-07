@@ -1,0 +1,81 @@
+
+.view-results {
+  padding: 30px;
+  min-height: 100vh;
+  background-color: #f5f6fa;
+}
+
+.view-results h1 {
+  color: #222;
+  margin-bottom: 8px;
+}
+
+.view-results p {
+  color: #666;
+}
+
+.result-summary {
+  display: flex;
+  gap: 20px;
+  margin-top: 25px;
+  flex-wrap: wrap;
+}
+
+.result-card {
+  background-color: white;
+  padding: 20px;
+  flex: 1;
+  min-width: 180px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.result-card h3 {
+  color: #666;
+  font-size: 16px;
+}
+
+.result-card h2 {
+  color: #2563eb;
+  margin-top: 10px;
+}
+
+.result-table-box {
+  background-color: white;
+  padding: 25px;
+  margin-top: 25px;
+  border-radius: 8px;
+  overflow-x: auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.result-table-box h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.result-table-box table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.result-table-box th,
+.result-table-box td {
+  padding: 13px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.result-table-box th {
+  background-color: #f1f3f8;
+}
+
+.pass-status {
+  color: green;
+  font-weight: bold;
+}
+
+.fail-status {
+  color: red;
+  font-weight: bold;
+}

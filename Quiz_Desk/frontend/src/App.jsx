@@ -17,6 +17,11 @@ import ExamPage from './pages/student/ExamPage';
 import MyResults from './pages/student/MyResults';
 import ExamHistory from './pages/student/ExamHistory';
 import Profile from './pages/student/Profile';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import ManageExams from './pages/admin/ManageExams';
+import ManageQuestions from './pages/admin/ManageQuestions';
+import ManageStudents from './pages/admin/ManageStudents';
+import ViewResults from './pages/admin/ViewResults';
 import './App.css';
 
 function App() {
@@ -49,9 +54,23 @@ function App() {
         <Route
           path="/exam-history"
           element={<ExamHistory />}
-        />  
-        <Route path="/student-profile" element={<Profile />} />   
-         </Routes>
+        />
+        <Route path="/student-profile" element={<Profile />} />
+        <Route
+          path="/admin-dashboard"
+          element={<AdminDashboard />}
+        />
+        <Route
+          path="/manage-exams"
+          element={<ManageExams />}
+        />
+        <Route
+          path="/manage-questions"
+          element={<ManageQuestions />}
+        />
+        <Route path="/manage-students" element={<ManageStudents />} />
+        <Route path="/view-results" element={<ViewResults />} />
+      </Routes>
 
       <Footer />
 

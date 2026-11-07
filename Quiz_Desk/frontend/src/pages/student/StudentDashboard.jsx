@@ -12,26 +12,30 @@ function StudentDashboard() {
         <h2>QuizDesk</h2>
 
         <ul>
-          <li>
-            <Link to="/student-dashboard">Dashboard</Link>
-          </li>
+  <li>
+    <Link to="/student-dashboard">Dashboard</Link>
+  </li>
 
-          <li>
-            <Link to="/available-exams">Available Exams</Link>
-          </li>
+  <li>
+    <Link to="/available-exams">Available Exams</Link>
+  </li>
 
-          <li>
-            <Link to="/my-results">My Results</Link>
-          </li>
+  <li>
+    <Link to="/my-results">My Results</Link>
+  </li>
 
-          <li>
-            <Link to="/exam-history">Exam History</Link>
-          </li>
+  <li>
+    <Link to="/exam-history">Exam History</Link>
+  </li>
 
-          <li>
-            <Link to="/student-profile">My Profile</Link>
-          </li>
-        </ul>
+  <li>
+    <Link to="/student-profile">My Profile</Link>
+  </li>
+
+  <li>
+    <Link to="/login">Logout</Link>
+  </li>
+</ul>
         <button>Logout</button>
 
       </div>

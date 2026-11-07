@@ -1,0 +1,96 @@
+
+.manage-students {
+  padding: 30px;
+  background-color: #f5f6fa;
+  min-height: 100vh;
+}
+
+.manage-students h1 {
+  color: #222;
+  margin-bottom: 8px;
+}
+
+.manage-students p {
+  color: #666;
+}
+
+.student-form-box,
+.student-table-box {
+  background-color: white;
+  padding: 25px;
+  margin-top: 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.student-form-box h2,
+.student-table-box h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.student-form-box form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.student-form-box input,
+.student-form-box select {
+  padding: 11px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  flex: 1 1 200px;
+}
+
+.student-form-box button {
+  padding: 11px 18px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.student-form-box button:hover {
+  background-color: #1d4ed8;
+}
+
+.student-table-box {
+  overflow-x: auto;
+}
+
+.student-table-box table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.student-table-box th,
+.student-table-box td {
+  padding: 13px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.student-table-box th {
+  background-color: #f1f3f8;
+}
+
+.edit-btn,
+.delete-btn {
+  padding: 7px 12px;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.edit-btn {
+  background-color: #16a34a;
+}
+
+.delete-btn {
+  background-color: #dc2626;
+}
