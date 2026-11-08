@@ -1,7 +1,62 @@
 
+import { useState, useEffect } from 'react';
 import './ExamHistory.css';
+import API_URL from '../../services/api';
 
 function ExamHistory() {
+  const [history, setHistory] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    async function fetchHistory() {
+      try {
+        const token = localStorage.getItem('token');
+
+        const response = await fetch(
+          `${API_URL}/exams/student/exam-history`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Could not load exam history');
+        }
+
+        setHistory(data.results || []);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchHistory();
+  }, []);
+
+  function formatDate(date) {
+    if (!date) return 'Not submitted';
+
+    return new Date(date).toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
+  }
+
+  if (loading) {
+    return <h2>Loading exam history...</h2>;
+  }
+
+  if (error) {
+    return <h2>{error}</h2>;
+  }
+
   return (
     <div className="exam-history">
 
@@ -16,7 +71,6 @@ function ExamHistory() {
         <h2>Previous Exams</h2>
 
         <table>
-
           <thead>
             <tr>
               <th>Exam Name</th>
@@ -28,41 +82,24 @@ function ExamHistory() {
           </thead>
 
           <tbody>
-
-            <tr>
-              <td>HTML Basics</td>
-              <td>05 Nov 2026</td>
-              <td>25 Minutes</td>
-              <td>50</td>
-              <td>Completed</td>
-            </tr>
-
-            <tr>
-              <td>CSS Fundamentals</td>
-              <td>03 Nov 2026</td>
-              <td>40 Minutes</td>
-              <td>50</td>
-              <td>Completed</td>
-            </tr>
-
-            <tr>
-              <td>JavaScript Basics</td>
-              <td>01 Nov 2026</td>
-              <td>30 Minutes</td>
-              <td>100</td>
-              <td>Completed</td>
-            </tr>
-
-            <tr>
-              <td>React Basics</td>
-              <td>Not submitted</td>
-              <td>10 Minutes</td>
-              <td>50</td>
-              <td>Incomplete</td>
-            </tr>
-
+            {history.length > 0 ? (
+              history.map((item) => (
+                <tr key={item.attempt_id}>
+                  <td>{item.exam_title}</td>
+                  <td>{formatDate(item.submitted_at || item.started_at)}</td>
+                  <td>{item.duration_minutes} Minutes</td>
+                  <td>{item.total_marks}</td>
+                  <td>{item.attempt_status}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5">
+                  You have not attempted any exams yet.
+                </td>
+              </tr>
+            )}
           </tbody>
-
         </table>
 
       </div>

@@ -1,6 +1,8 @@
+
 import { useState } from 'react';
 import './Register.css';
 import { Link } from 'react-router-dom';
+import API_URL from '../services/api';
 
 function Register() {
 
@@ -11,7 +13,7 @@ function Register() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  function handleRegister(e) {
+  async function handleRegister(e) {
 
     e.preventDefault();
 
@@ -20,7 +22,45 @@ function Register() {
       return;
     }
 
-    alert('Registration form submitted successfully');
+    try {
+
+      const response = await fetch(`${API_URL}/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          full_name: name,
+          email: email,
+          password: password,
+          student_code: studentId,
+          course: course
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert('Registration successful!');
+
+        setName('');
+        setEmail('');
+        setStudentId('');
+        setCourse('');
+        setPassword('');
+        setConfirmPassword('');
+
+      } else {
+        alert(data.message);
+      }
+
+    } catch (error) {
+
+      alert('Cannot connect to server. Please try again.');
+
+      console.log(error);
+
+    }
 
   }
 

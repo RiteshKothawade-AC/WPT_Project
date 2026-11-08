@@ -1,96 +1,154 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import API_URL from '../../services/api';
 import './ManageStudents.css';
 
 function ManageStudents() {
-  const [students, setStudents] = useState([
-    {
-      id: 1,
-      name: 'Rahul Patil',
-      email: 'rahul@gmail.com',
-      studentId: 'STU101',
-      course: 'BCA',
-      status: 'Active'
-    },
-    {
-      id: 2,
-      name: 'Priya Sharma',
-      email: 'priya@gmail.com',
-      studentId: 'STU102',
-      course: 'BSc CS',
-      status: 'Active'
-    },
-    {
-      id: 3,
-      name: 'Amit Joshi',
-      email: 'amit@gmail.com',
-      studentId: 'STU103',
-      course: 'BCA',
-      status: 'Inactive'
-    }
-  ]);
+  const [students, setStudents] = useState([]);
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [studentId, setStudentId] = useState('');
   const [course, setCourse] = useState('');
   const [status, setStatus] = useState('Active');
+  const [password, setPassword] = useState('');
   const [editId, setEditId] = useState(null);
 
-  function handleSubmit(e) {
+  useEffect(() => {
+    fetchStudents();
+  }, []);
+
+  // Fetch students from database
+  const fetchStudents = async () => {
+    try {
+      const response = await fetch(`${API_URL}/auth/admin/students`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        const formattedStudents = data.map((student) => ({
+          id: student.user_id,
+          name: student.full_name,
+          email: student.email,
+          studentId: student.student_code || '',
+          course: student.course || '',
+          status: student.status === 'active' ? 'Active' : 'Inactive'
+        }));
+
+        setStudents(formattedStudents);
+      } else {
+        alert(data.message || 'Error fetching students');
+      }
+    } catch (error) {
+      console.log(error);
+      alert('Server error');
+    }
+  };
+
+  // Add or update student
+  
+const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const studentData = {
-      id: editId || Date.now(),
-      name,
-      email,
-      studentId,
-      course,
-      status
-    };
+    const isEditing = editId !== null;
 
-    if (editId) {
-      setStudents(
-        students.map((student) =>
-          student.id === editId ? studentData : student
-        )
-      );
-    } else {
-      setStudents([...students, studentData]);
+    try {
+        const response = await fetch(
+            isEditing
+                ? `${API_URL}/auth/admin/students/${editId}`
+                : `${API_URL}/auth/admin/students`,
+            {
+                method: isEditing ? 'PUT' : 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify(
+                    isEditing
+                        ? { name, email, studentId, course, status }
+                        : { name, email, studentId, course, password }
+                )
+            }
+        );
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert(
+                isEditing
+                    ? 'Student updated successfully'
+                    : 'Student added successfully'
+            );
+
+            clearForm();
+            fetchStudents();
+        } else {
+            alert(data.message || 'Operation failed');
+        }
+    } catch (error) {
+        console.log(error);
+        alert('Server error');
     }
+};
 
-    clearForm();
-  }
 
-  function handleEdit(student) {
+  // Edit student
+  const handleEdit = (student) => {
     setName(student.name);
     setEmail(student.email);
     setStudentId(student.studentId);
     setCourse(student.course);
     setStatus(student.status);
     setEditId(student.id);
-  }
+  };
 
-  function handleDelete(id) {
+  // Delete student (database connection will be added next)
+  const handleDelete = async (id) => {
     const confirmDelete = window.confirm(
-      'Are you sure you want to delete this student?'
+      'Are you sure you want to deactivate this student?'
     );
 
     if (confirmDelete) {
-      setStudents(
-        students.filter((student) => student.id !== id)
-      );
-    }
-  }
+      try {
+        const response = await fetch(
+          `${API_URL}/auth/admin/students/${id}`,
+          {
+            method: 'DELETE',
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+          }
+        );
 
-  function clearForm() {
+        const data = await response.json();
+
+        if (response.ok) {
+          alert('Student deactivated successfully');
+          fetchStudents();
+        } else {
+          alert(data.message || 'Error deactivating student');
+        }
+      } catch (error) {
+        console.log(error);
+        alert('Server error');
+      }
+    }
+  };
+
+  // Clear form
+  const clearForm = () => {
     setName('');
     setEmail('');
     setStudentId('');
     setCourse('');
     setStatus('Active');
+    setPassword('');
     setEditId(null);
-  }
+};
 
   return (
     <div className="manage-students">
@@ -132,6 +190,15 @@ function ManageStudents() {
             onChange={(e) => setCourse(e.target.value)}
             required
           />
+          {!editId && (
+    <input
+        type="password"
+        placeholder="Student Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+    />
+)}
 
           <select
             value={status}
@@ -188,7 +255,7 @@ function ManageStudents() {
                     className="delete-btn"
                     onClick={() => handleDelete(student.id)}
                   >
-                    Delete
+                    Deactivate
                   </button>
                 </td>
               </tr>

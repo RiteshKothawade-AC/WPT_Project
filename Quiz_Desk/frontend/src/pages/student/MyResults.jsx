@@ -1,7 +1,71 @@
-
+import { useState, useEffect } from 'react';
 import './MyResults.css';
+import API_URL from '../../services/api';
 
 function MyResults() {
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    async function fetchResults() {
+      try {
+        const token = localStorage.getItem('token');
+
+        const response = await fetch(
+          `${API_URL}/exams/student/my-results`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Could not load results');
+        }
+
+        setResults(Array.isArray(data) ? data : data.results || []);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchResults();
+  }, []);
+
+  const totalExams = results.length;
+
+  const averageScore = totalExams > 0
+    ? results.reduce((total, result) => total + Number(result.percentage || 0), 0) / totalExams
+    : 0;
+
+  const highestScore = totalExams > 0
+    ? Math.max(...results.map(result => Number(result.percentage || 0)))
+    : 0;
+
+  function formatDate(date) {
+    if (!date) return '-';
+
+    return new Date(date).toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
+  }
+
+  if (loading) {
+    return <h2>Loading results...</h2>;
+  }
+
+  if (error) {
+    return <h2>{error}</h2>;
+  }
+
   return (
     <div className="my-results">
 
@@ -15,17 +79,17 @@ function MyResults() {
 
         <div className="result-card">
           <h3>Exams Completed</h3>
-          <h2>8</h2>
+          <h2>{totalExams}</h2>
         </div>
 
         <div className="result-card">
           <h3>Average Score</h3>
-          <h2>85%</h2>
+          <h2>{averageScore.toFixed(2)}%</h2>
         </div>
 
         <div className="result-card">
           <h3>Highest Score</h3>
-          <h2>95%</h2>
+          <h2>{highestScore.toFixed(2)}%</h2>
         </div>
 
       </div>
@@ -49,32 +113,26 @@ function MyResults() {
 
           <tbody>
 
-            <tr>
-              <td>HTML Basics</td>
-              <td>05 Nov 2026</td>
-              <td>50</td>
-              <td>45</td>
-              <td>90%</td>
-              <td>Pass</td>
-            </tr>
-
-            <tr>
-              <td>CSS Fundamentals</td>
-              <td>03 Nov 2026</td>
-              <td>50</td>
-              <td>40</td>
-              <td>80%</td>
-              <td>Pass</td>
-            </tr>
-
-            <tr>
-              <td>JavaScript Basics</td>
-              <td>01 Nov 2026</td>
-              <td>100</td>
-              <td>85</td>
-              <td>85%</td>
-              <td>Pass</td>
-            </tr>
+            {results.length > 0 ? (
+              results.map((result) => (
+                <tr key={result.result_id}>
+                  <td>
+                    {result.exam_title || result.title || result.exam_name}
+                  </td>
+                  <td>
+                    {formatDate(result.submitted_at || result.evaluated_at)}
+                  </td>
+                  <td>{result.total_marks}</td>
+                  <td>{result.obtained_marks}</td>
+                  <td>{result.percentage}%</td>
+                  <td>{result.result_status}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6">You have not completed any exams yet.</td>
+              </tr>
+            )}
 
           </tbody>
 

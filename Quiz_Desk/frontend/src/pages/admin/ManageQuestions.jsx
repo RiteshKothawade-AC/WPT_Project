@@ -1,34 +1,74 @@
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import API_URL from '../../services/api';
 import './ManageQuestions.css';
 
 function ManageQuestions() {
 
-  const [questions, setQuestions] = useState([
-    {
-      id: 1,
-      exam: 'HTML Basics',
-      question: 'What does HTML stand for?',
-      optionA: 'Hyper Text Markup Language',
-      optionB: 'High Text Machine Language',
-      optionC: 'Hyper Transfer Markup Language',
-      optionD: 'Home Tool Markup Language',
-      correctAnswer: 'A'
-    },
-    {
-      id: 2,
-      exam: 'HTML Basics',
-      question: 'Which tag is used for a paragraph?',
-      optionA: '<h1>',
-      optionB: '<p>',
-      optionC: '<div>',
-      optionD: '<img>',
-      correctAnswer: 'B'
-    }
-  ]);
+  const [questions, setQuestions] = useState([]);
 
-  const [exam, setExam] = useState('HTML Basics');
-  const [question, setQuestion] = useState('');
+  useEffect(() => {
+    fetchExamList();
+    fetchQuestions();
+  }, []);
+
+  const fetchExamList = async () => {
+    try {
+      const response = await fetch(`${API_URL}/exams/admin/all`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setExamList(data);
+      } else {
+        alert(data.message || 'Error loading exams');
+      }
+
+    } catch (error) {
+      console.log(error);
+      alert('Server error');
+    }
+  };
+  const fetchQuestions = async () => {
+    try {
+      const response = await fetch(`${API_URL}/exams/admin/questions`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        const formattedQuestions = data.map((item) => ({
+          id: item.question_id,
+          exam: item.exam_title,
+          examId: item.exam_id,
+          question: item.question_text,
+          optionA: item.options[0]?.option_text || '',
+          optionB: item.options[1]?.option_text || '',
+          optionC: item.options[2]?.option_text || '',
+          optionD: item.options[3]?.option_text || '',
+          correctAnswer: ['A', 'B', 'C', 'D'][
+            item.options.findIndex(option => Number(option.is_correct) === 1)
+          ]
+        }));
+
+        setQuestions(formattedQuestions);
+      } else {
+        alert(data.message || 'Error fetching questions');
+      }
+
+    } catch (error) {
+      console.log(error);
+      alert('Server error');
+    }
+  };
+
+  const [exam, setExam] = useState(''); const [question, setQuestion] = useState('');
   const [optionA, setOptionA] = useState('');
   const [optionB, setOptionB] = useState('');
   const [optionC, setOptionC] = useState('');
@@ -36,9 +76,10 @@ function ManageQuestions() {
   const [correctAnswer, setCorrectAnswer] = useState('A');
 
   const [editId, setEditId] = useState(null);
+  const [examList, setExamList] = useState([]);
 
   function clearForm() {
-    setExam('HTML Basics');
+    setExam('');
     setQuestion('');
     setOptionA('');
     setOptionB('');
@@ -47,56 +88,71 @@ function ManageQuestions() {
     setCorrectAnswer('A');
     setEditId(null);
   }
-
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
-    if (editId === null) {
-
-      const newQuestion = {
-        id: Date.now(),
-        exam,
-        question,
-        optionA,
-        optionB,
-        optionC,
-        optionD,
-        correctAnswer
-      };
-
-      setQuestions([...questions, newQuestion]);
-
-      alert('Question added successfully!');
-
-    } else {
-
-      const updatedQuestions = questions.map((item) => {
-        if (item.id === editId) {
-          return {
-            ...item,
-            exam,
-            question,
-            optionA,
-            optionB,
-            optionC,
-            optionD,
-            correctAnswer
-          };
+    const questionData = {
+      exam_id: Number(exam),
+      question_text: question,
+      options: [
+        {
+          option_text: optionA,
+          is_correct: correctAnswer === 'A'
+        },
+        {
+          option_text: optionB,
+          is_correct: correctAnswer === 'B'
+        },
+        {
+          option_text: optionC,
+          is_correct: correctAnswer === 'C'
+        },
+        {
+          option_text: optionD,
+          is_correct: correctAnswer === 'D'
         }
+      ]
+    };
 
-        return item;
+    try {
+      const url = editId === null
+        ? `${API_URL}/exams/admin/questions`
+        : `${API_URL}/exams/admin/questions/${editId}`;
+
+      const method = editId === null ? 'POST' : 'PUT';
+
+      const response = await fetch(url, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(questionData)
       });
 
-      setQuestions(updatedQuestions);
+      const data = await response.json();
 
-      alert('Question updated successfully!');
+      if (response.ok) {
+        alert(editId === null
+          ? 'Question added successfully!'
+          : 'Question updated successfully!'
+        );
+        clearForm();
+        fetchQuestions();
+      } else {
+        alert(data.message || 'Unable to add question');
+      }
+
+    } catch (error) {
+      console.log(error);
+      alert('Server error');
     }
-
-    clearForm();
   }
 
+
+
   function handleEdit(item) {
-    setExam(item.exam);
+    setExam(String(item.examId));
     setQuestion(item.question);
     setOptionA(item.optionA);
     setOptionB(item.optionB);
@@ -106,13 +162,41 @@ function ManageQuestions() {
     setEditId(item.id);
   }
 
-  function handleDelete(id) {
-    const updatedQuestions = questions.filter(
-      (item) => item.id !== id
+  async function handleDelete(id) {
+
+    const confirmDelete = window.confirm(
+        'Are you sure you want to delete this question?'
     );
 
-    setQuestions(updatedQuestions);
-  }
+    if (!confirmDelete) {
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `${API_URL}/exams/admin/questions/${id}`,
+            {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            }
+        );
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert('Question deleted successfully!');
+            fetchQuestions();
+        } else {
+            alert(data.message || 'Unable to delete question');
+        }
+
+    } catch (error) {
+        console.log(error);
+        alert('Server error');
+    }
+}
 
   return (
     <div className="manage-questions">
@@ -136,10 +220,15 @@ function ManageQuestions() {
           <select
             value={exam}
             onChange={(e) => setExam(e.target.value)}
+            required
           >
-            <option value="HTML Basics">HTML Basics</option>
-            <option value="CSS Fundamentals">CSS Fundamentals</option>
-            <option value="JavaScript Basics">JavaScript Basics</option>
+            <option value="">Select Exam</option>
+
+            {examList.map((item) => (
+              <option key={item.exam_id} value={item.exam_id}>
+                {item.title}
+              </option>
+            ))}
           </select>
 
           <label>Question</label>

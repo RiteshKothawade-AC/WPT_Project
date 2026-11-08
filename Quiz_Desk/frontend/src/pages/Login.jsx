@@ -1,7 +1,8 @@
+
 import { useState } from 'react';
 import './Login.css';
-
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import API_URL from '../services/api';
 
 function Login() {
 
@@ -9,13 +10,62 @@ function Login() {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('Student');
 
-  function handleLogin(e) {
+  const navigate = useNavigate();
+
+  async function handleLogin(e) {
 
     e.preventDefault();
 
-    alert("Email: " + email);
+    try {
 
-    alert("Role: " + role);
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+
+        // Check whether selected role matches account role
+        if (data.user.role !== role.toLowerCase()) {
+          alert('Selected role does not match your account');
+          return;
+        }
+
+        // Store login token
+        localStorage.setItem('token', data.token);
+
+        // Store user information
+        localStorage.setItem('user', JSON.stringify(data.user));
+
+        alert('Login successful!');
+
+        if (data.user.role === 'admin') {
+          navigate('/admin-dashboard');
+        } else {
+          navigate('/student-dashboard');
+        }
+
+      } else {
+
+        alert(data.message);
+
+      }
+
+    } catch (error) {
+
+      alert('Cannot connect to server. Please try again.');
+
+      console.log(error);
+
+    }
 
   }
 
@@ -39,6 +89,7 @@ function Login() {
             placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required
           />
 
           <label>Password</label>
@@ -48,6 +99,7 @@ function Login() {
             placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
 
           <label>Login As</label>
