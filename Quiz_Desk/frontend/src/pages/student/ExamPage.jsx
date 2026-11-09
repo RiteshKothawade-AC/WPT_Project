@@ -107,14 +107,6 @@ function ExamPage() {
 
             if (response.ok) {
 
-                alert(
-                    'Exam submitted successfully!\n' +
-                    'Obtained Marks: ' + data.obtained_marks +
-                    '/' + data.total_marks +
-                    '\nPercentage: ' + data.percentage + '%' +
-                    '\nResult: ' + data.result_status
-                );
-
                 navigate('/my-results');
 
             } else {

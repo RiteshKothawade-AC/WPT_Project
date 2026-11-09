@@ -1,4 +1,9 @@
+import { useNavigate } from 'react-router-dom';
+
 function Home() {
+
+  const navigate = useNavigate();
+
   return (
     <main>
 
@@ -8,7 +13,7 @@ function Home() {
         <div className="hero-content">
 
           <p className="small-heading">
-            ONLINE ASSESSMENTS 
+            ONLINE ASSESSMENTS
           </p>
 
           <h1>
@@ -22,7 +27,10 @@ function Home() {
             online examinations and track their progress.
           </p>
 
-          <button className="get-started-btn">
+          <button
+            className="get-started-btn"
+            onClick={() => navigate('/login')}
+          >
             Get Started
           </button>
 
@@ -61,35 +69,35 @@ function Home() {
       </section>
       <section className="how-it-works">
 
-  <h2>How QuizDesk Works</h2>
+        <h2>How QuizDesk Works</h2>
 
-  <p className="how-description">
-    Get started with online examinations in three simple steps.
-  </p>
+        <p className="how-description">
+          Get started with online examinations in three simple steps.
+        </p>
 
-  <div className="steps-container">
+        <div className="steps-container">
 
-    <div className="step-card">
-      <h3>01</h3>
-      <h4>Sign In</h4>
-      <p>Create your account and log in.</p>
-    </div>
+          <div className="step-card">
+            <h3>01</h3>
+            <h4>Sign In</h4>
+            <p>Create your account and log in.</p>
+          </div>
 
-    <div className="step-card">
-      <h3>02</h3>
-      <h4>Attend Exam</h4>
-      <p>Choose an available exam and answer questions.</p>
-    </div>
+          <div className="step-card">
+            <h3>02</h3>
+            <h4>Attend Exam</h4>
+            <p>Choose an available exam and answer questions.</p>
+          </div>
 
-    <div className="step-card">
-      <h3>03</h3>
-      <h4>View Results</h4>
-      <p>Submit your exam and check your marks.</p>
-    </div>
+          <div className="step-card">
+            <h3>03</h3>
+            <h4>View Results</h4>
+            <p>Submit your exam and check your marks.</p>
+          </div>
 
-  </div>
+        </div>
 
-</section>
+      </section>
 
     </main>
   );

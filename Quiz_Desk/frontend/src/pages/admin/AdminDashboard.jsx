@@ -1,6 +1,5 @@
 
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import API_URL from '../../services/api';
 import './AdminDashboard.css';
 
@@ -14,8 +13,6 @@ function AdminDashboard() {
 
     const [recentExams, setRecentExams] = useState([]);
     const [loading, setLoading] = useState(true);
-
-    const navigate = useNavigate();
 
     useEffect(() => {
 
@@ -53,124 +50,82 @@ function AdminDashboard() {
 
     }, []);
 
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        navigate('/login');
-    };
-
     return (
-        <div className="admin-dashboard">
+        <div className="admin-main">
 
-            {/* Sidebar */}
-            <div className="admin-sidebar">
+            <div className="admin-header">
+                <h1>Admin Dashboard</h1>
+                <p>Welcome back, Admin!</p>
+            </div>
 
-                <h2>QuizDesk</h2>
+            {/* Summary Cards */}
+            <div className="admin-cards">
 
-                <ul>
-                    <li>
-                        <Link to="/admin-dashboard">Dashboard</Link>
-                    </li>
+                <div className="admin-card">
+                    <h3>Total Students</h3>
+                    <h1>{loading ? '...' : stats.total_students}</h1>
+                </div>
 
-                    <li>
-                        <Link to="/manage-exams">Manage Exams</Link>
-                    </li>
+                <div className="admin-card">
+                    <h3>Total Exams</h3>
+                    <h1>{loading ? '...' : stats.total_exams}</h1>
+                </div>
 
-                    <li>
-                        <Link to="/manage-questions">Manage Questions</Link>
-                    </li>
-
-                    <li>
-                        <Link to="/manage-students">Manage Students</Link>
-                    </li>
-
-                    <li>
-                        <Link to="/view-results">View Results</Link>
-                    </li>
-                </ul>
-
-                <button onClick={handleLogout}>Logout</button>
+                <div className="admin-card">
+                    <h3>Total Questions</h3>
+                    <h1>{loading ? '...' : stats.total_questions}</h1>
+                </div>
 
             </div>
 
-            {/* Main Content */}
-            <div className="admin-main">
+            {/* Recent Exams */}
+            <div className="admin-activity">
 
-                <div className="admin-header">
-                    <h1>Admin Dashboard</h1>
-                    <p>Welcome back, Admin!</p>
-                </div>
+                <h2>Recent Examinations</h2>
 
-                {/* Summary Cards */}
-                <div className="admin-cards">
+                <table>
 
-                    <div className="admin-card">
-                        <h3>Total Students</h3>
-                        <h1>{loading ? '...' : stats.total_students}</h1>
-                    </div>
+                    <thead>
+                        <tr>
+                            <th>Exam Name</th>
+                            <th>Questions</th>
+                            <th>Duration</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
 
-                    <div className="admin-card">
-                        <h3>Total Exams</h3>
-                        <h1>{loading ? '...' : stats.total_exams}</h1>
-                    </div>
+                    <tbody>
 
-                    <div className="admin-card">
-                        <h3>Total Questions</h3>
-                        <h1>{loading ? '...' : stats.total_questions}</h1>
-                    </div>
+                        {loading ? (
 
-                </div>
-
-                {/* Recent Exams */}
-                <div className="admin-activity">
-
-                    <h2>Recent Examinations</h2>
-
-                    <table>
-
-                        <thead>
                             <tr>
-                                <th>Exam Name</th>
-                                <th>Questions</th>
-                                <th>Duration</th>
-                                <th>Status</th>
+                                <td colSpan="4">Loading...</td>
                             </tr>
-                        </thead>
 
-                        <tbody>
+                        ) : recentExams.length > 0 ? (
 
-                            {loading ? (
+                            recentExams.map((exam) => (
 
-                                <tr>
-                                    <td colSpan="4">Loading...</td>
+                                <tr key={exam.exam_id}>
+                                    <td>{exam.title}</td>
+                                    <td>{exam.question_count}</td>
+                                    <td>{exam.duration_minutes} Minutes</td>
+                                    <td>{exam.status}</td>
                                 </tr>
 
-                            ) : recentExams.length > 0 ? (
+                            ))
 
-                                recentExams.map((exam) => (
+                        ) : (
 
-                                    <tr key={exam.exam_id}>
-                                        <td>{exam.title}</td>
-                                        <td>{exam.question_count}</td>
-                                        <td>{exam.duration_minutes} Minutes</td>
-                                        <td>{exam.status}</td>
-                                    </tr>
+                            <tr>
+                                <td colSpan="4">No exams found</td>
+                            </tr>
 
-                                ))
+                        )}
 
-                            ) : (
+                    </tbody>
 
-                                <tr>
-                                    <td colSpan="4">No exams found</td>
-                                </tr>
-
-                            )}
-
-                        </tbody>
-
-                    </table>
-
-                </div>
+                </table>
 
             </div>
 
