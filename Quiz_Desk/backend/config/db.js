@@ -1,7 +1,9 @@
 
 const mysql = require('mysql2');
+const path = require('path');
+
 require('dotenv').config({
-    path: require('path').resolve(__dirname, '../.env')
+    path: path.resolve(__dirname, '../.env')
 });
 
 const db = mysql.createConnection({
@@ -10,8 +12,6 @@ const db = mysql.createConnection({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     port: Number(process.env.DB_PORT),
-
-    // TiDB Cloud Starter requires TLS
     ssl: {
         minVersion: 'TLSv1.2'
     }
