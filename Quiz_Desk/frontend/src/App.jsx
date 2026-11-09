@@ -23,161 +23,144 @@ import ManageQuestions from './pages/admin/ManageQuestions';
 import ManageStudents from './pages/admin/ManageStudents';
 import ViewResults from './pages/admin/ViewResults';
 
+import AdminLayout from './layouts/AdminLayout';
+import StudentLayout from './layouts/StudentLayout';
 import ProtectedRoute from './components/ProtectedRoute';
 
 import './App.css';
 
 function Layout() {
-  const location = useLocation();
 
-  const isDashboardPage =
-    location.pathname.startsWith('/student-') ||
-    location.pathname.startsWith('/admin-') ||
-    location.pathname.startsWith('/manage-') ||
-    location.pathname === '/admin' ||
-    location.pathname === '/my-results' ||
-    location.pathname === '/exam-history' ||
-    location.pathname === '/student-profile' ||
-    location.pathname === '/view-results' ||
-    location.pathname.startsWith('/exam/');
+    const location = useLocation();
 
-  return (
-    <>
-      {!isDashboardPage && <Navbar />}
+    const isDashboardPage =
+        location.pathname.startsWith('/student-') ||
+        location.pathname.startsWith('/admin-') ||
+        location.pathname.startsWith('/manage-') ||
+        location.pathname === '/admin' ||
+        location.pathname === '/my-results' ||
+        location.pathname === '/exam-history' ||
+        location.pathname === '/student-profile' ||
+        location.pathname === '/view-results' ||
+        location.pathname.startsWith('/exam/');
 
-      <Routes>
-        {/* Public Pages */}
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
+    return (
+        <>
+            {!isDashboardPage && <Navbar />}
 
-        {/* Student Pages */}
-        <Route
-          path="/student-dashboard"
-          element={
-            <ProtectedRoute requiredRole="student">
-              <StudentDashboard />
-            </ProtectedRoute>
-          }
-        />
+            <Routes>
 
-        <Route
-          path="/student-available-exams"
-          element={
-            <ProtectedRoute requiredRole="student">
-              <AvailableExams />
-            </ProtectedRoute>
-          }
-        />
+                {/* Public Pages */}
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<Contact />} />
 
-        <Route
-          path="/exam/:attemptId/:examId"
-          element={
-            <ProtectedRoute requiredRole="student">
-              <ExamPage />
-            </ProtectedRoute>
-          }
-        />
+                {/* Student Layout */}
+                <Route
+                    element={
+                        <ProtectedRoute requiredRole="student">
+                            <StudentLayout />
+                        </ProtectedRoute>
+                    }
+                >
 
-        <Route
-          path="/my-results"
-          element={
-            <ProtectedRoute requiredRole="student">
-              <MyResults />
-            </ProtectedRoute>
-          }
-        />
+                    <Route
+                        path="/student-dashboard"
+                        element={<StudentDashboard />}
+                    />
 
-        <Route
-          path="/exam-history"
-          element={
-            <ProtectedRoute requiredRole="student">
-              <ExamHistory />
-            </ProtectedRoute>
-          }
-        />
+                    <Route
+                        path="/student-available-exams"
+                        element={<AvailableExams />}
+                    />
 
-        <Route
-          path="/student-profile"
-          element={
-            <ProtectedRoute requiredRole="student">
-              <Profile />
-            </ProtectedRoute>
-          }
-        />
+                    <Route
+                        path="/my-results"
+                        element={<MyResults />}
+                    />
 
-        {/* Admin Pages */}
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />
+                    <Route
+                        path="/exam-history"
+                        element={<ExamHistory />}
+                    />
 
-        <Route
-          path="/admin-dashboard"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />
+                    <Route
+                        path="/student-profile"
+                        element={<Profile />}
+                    />
 
-        <Route
-          path="/manage-exams"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <ManageExams />
-            </ProtectedRoute>
-          }
-        />
+                </Route>
 
-        <Route
-          path="/manage-questions"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <ManageQuestions />
-            </ProtectedRoute>
-          }
-        />
+                {/* Exam Page */}
+                <Route
+                    path="/exam/:attemptId/:examId"
+                    element={
+                        <ProtectedRoute requiredRole="student">
+                            <ExamPage />
+                        </ProtectedRoute>
+                    }
+                />
 
-        <Route
-          path="/manage-students"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <ManageStudents />
-            </ProtectedRoute>
-          }
-        />
+                {/* Admin Layout */}
+                <Route
+                    element={
+                        <ProtectedRoute requiredRole="admin">
+                            <AdminLayout />
+                        </ProtectedRoute>
+                    }
+                >
 
-        <Route
-          path="/view-results"
-          element={
-            <ProtectedRoute requiredRole="admin">
-              <ViewResults />
-            </ProtectedRoute>
-          }
-        />
+                    <Route
+                        path="/admin-dashboard"
+                        element={<AdminDashboard />}
+                    />
 
-        {/* Unknown Page */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+                    <Route
+                        path="/admin"
+                        element={<Navigate to="/admin-dashboard" replace />}
+                    />
 
-      {!isDashboardPage && <Footer />}
-    </>
-  );
+                    <Route
+                        path="/manage-exams"
+                        element={<ManageExams />}
+                    />
+
+                    <Route
+                        path="/manage-questions"
+                        element={<ManageQuestions />}
+                    />
+
+                    <Route
+                        path="/manage-students"
+                        element={<ManageStudents />}
+                    />
+
+                    <Route
+                        path="/view-results"
+                        element={<ViewResults />}
+                    />
+
+                </Route>
+
+                {/* Unknown Page */}
+                <Route path="*" element={<Navigate to="/" replace />} />
+
+            </Routes>
+
+            {!isDashboardPage && <Footer />}
+        </>
+    );
 }
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Layout />
-    </BrowserRouter>
-  );
+
+    return (
+        <BrowserRouter>
+            <Layout />
+        </BrowserRouter>
+    );
 }
 
 export default App;
